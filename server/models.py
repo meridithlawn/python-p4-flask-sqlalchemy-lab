@@ -24,10 +24,10 @@ class Zookeeper(db.Model):
 class Enclosure(db.Model):
 
     __tablename__ = 'enclosures'
-    __table_args__= (
-        db.CheckConstraint("environment IN (\'Grass\', \'Sand\', \'Water\')", 
-        name="env_check"),
-    )
+    # __table_args__= (
+    #     db.CheckConstraint("environment IN (\'Grass\', \'Sand\', \'Water\')", 
+    #     name="env_check"),
+    # )
     id = db.Column(db.Integer, primary_key=True)
     environment = db.Column(db.String, nullable=False)
     open_to_visitors = db.Column(db.Boolean, nullable=False)
@@ -44,12 +44,12 @@ class Animal(db.Model):
     species = db.Column(db.String, nullable=False)
 
     zookeeper_id = db.Column(db.Integer, db.ForeignKey("zookeepers.id"))
-    enclosure = db.Column(db.Integer, db.ForeignKey("enclosures.id"), nullable=False)
+    enclosure_id = db.Column(db.Integer, db.ForeignKey("enclosures.id"))
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     # ask question about cascading
     zookeeper = db.relationship("Zookeeper", back_populates = 'animals')
-    enclosure = db.relationship("Zookeeper", back_populates = 'animals')
+    enclosure = db.relationship("Enclosure", back_populates = 'animals')
 
 def __repr__(self):
     return f"<Animal #{self.id}:\n"\
